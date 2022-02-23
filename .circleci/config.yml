@@ -8,14 +8,33 @@ jobs:
       - checkout
       - run:
           name: Update NPM
-          command: "sudo npm install -g npm@5"
+          command: "sudo npm install -g npm@5"\
       - run:
           name: Install Dependencies
-          command: npm install
+          command: yarn install
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+      - run: 
+          command: pod install
+          working_directory: ios
+      - restore_cache:
+          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
       - run:
           name: Run tests
-          command: npm run test
+          command: yarn run test
+      - run:
+          name: Build debug APK and release APK
+          command: npx react-native run-android --variant=release
+      - run:
+          name: release bundle AAB file
+          command: cd android && ./gradlew bundleRelease
