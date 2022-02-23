@@ -21,11 +21,6 @@ jobs:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
           paths:
             - node_modules
-      - run: 
-          command: cd ios && pod install
-          working_directory: ios
-      - restore_cache:
-          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
       - run:
           name: Run tests
           command: yarn run test
