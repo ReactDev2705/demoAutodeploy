@@ -22,7 +22,7 @@ jobs:
           paths:
             - node_modules
       - run: 
-          command: pod install
+          command: cd ios && pod install
           working_directory: ios
       - restore_cache:
           key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
