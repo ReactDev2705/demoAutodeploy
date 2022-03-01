@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: npm install
+          command: yarn install
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -24,14 +24,12 @@ jobs:
       - run:
           name: Run tests
           command: yarn run test
+      - run: 
+          command: pod install
+          working_directory: ios
       - run:
           name: Build Android Release
           command: cd android && ./gradlew assembleRelease
       - run:
           name: release bundle AAB file
           command: cd android && ./gradlew bundleRelease
-      - run:
-          name: Upload APK file
-          with:
-            name: app-release.apk
-            path: android/app/build/outputs/apk/release/
