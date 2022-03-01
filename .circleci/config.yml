@@ -6,7 +6,7 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: yarn install
+          command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -22,9 +22,6 @@ jobs:
       - run:
           name: Run tests
           command: yarn run test
-      - run: 
-          command: pod install
-          working_directory: ios
       - run:
           name: Build Android Release
           command: cd android && ./gradlew assembleRelease
