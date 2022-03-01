@@ -25,8 +25,13 @@ jobs:
           name: Run tests
           command: yarn run test
       - run:
-          name: Build debug APK and release APK
-          command: npx react-native run-android --variant=release
+          name: Build Android Release
+          command: cd android && ./gradlew assembleRelease
       - run:
           name: release bundle AAB file
           command: cd android && ./gradlew bundleRelease
+      - run:
+          name: Upload APK file
+          with:
+            name: app-release.apk
+            path: android/app/build/outputs/apk/release/
